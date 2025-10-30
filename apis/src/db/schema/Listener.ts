@@ -3,11 +3,57 @@ import { pgEnum } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
 import { db, types, table } from "@duneanalytics/sim-idx";
 
-export const poolCreated = table("pool_created", {
+export const curvePhaseEnded = table("curve_phase_ended", {
   chainId: db.uint64('chain_id'),
-  caller: db.address('caller'),
-  pool: db.address('pool'),
-  token0: db.address('token0'),
-  token1: db.address('token1'),
-  fee: db.uint24('fee'),
+  tokenContract: db.address('token_contract'),
+  poolAddress: db.address('pool_address'),
+})
+
+export const tokenBought = table("token_bought", {
+  chainId: db.uint64('chain_id'),
+  tokenContract: db.address('token_contract'),
+  buyer: db.address('buyer'),
+  paymentAmount: db.uint256('payment_amount'),
+  tokenAmount: db.uint256('token_amount'),
+  userHasProPlan: t.boolean('user_has_pro_plan'),
+})
+
+export const tokenCreated = table("token_created", {
+  chainId: db.uint64('chain_id'),
+  tokenContract: db.address('token_contract'),
+  creator: db.address('creator'),
+  name: t.text('name'),
+  symbol: t.text('symbol'),
+  userHasProPlan: t.boolean('user_has_pro_plan'),
+  initialBuyAmountX: db.uint256('initial_buy_amount_x'),
+})
+
+export const tokenSold = table("token_sold", {
+  chainId: db.uint64('chain_id'),
+  tokenContract: db.address('token_contract'),
+  seller: db.address('seller'),
+  tokenAmount: db.uint256('token_amount'),
+  paymentAmount: db.uint256('payment_amount'),
+  userHasProPlan: t.boolean('user_has_pro_plan'),
+})
+
+export const tokenSwap = table("token_swap", {
+  chainId: db.uint64('chain_id'),
+  transactionHash: db.bytes32('transaction_hash'),
+  logIndex: db.uint64('log_index'),
+  tokenContract: db.address('token_contract'),
+  isBuy: t.boolean('is_buy'),
+  swapper: db.address('swapper'),
+  receivedAmount: db.uint256('received_amount'),
+  spentAmount: db.uint256('spent_amount'),
+  usdValue: db.uint256('usd_value'),
+  userHasProPlan: t.boolean('user_has_pro_plan'),
+  feeType: t.text('fee_type'),
+  grossFee: db.uint256('gross_fee'),
+  equityFee: db.uint256('equity_fee'),
+  netFee: db.uint256('net_fee'),
+  currentWldUsdPrice: db.uint256('current_wld_usd_price'),
+  poolAddress: db.address('pool_address'),
+  timestamp: db.uint256('timestamp'),
+  block: db.uint256('block'),
 })

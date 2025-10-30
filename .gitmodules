@@ -4,3 +4,6 @@
 [submodule "listeners/lib/sim-idx-sol"]
 	path = listeners/lib/sim-idx-sol
 	url = https://github.com/duneanalytics/sim-idx-sol
+[submodule "listeners/lib/openzeppelin-contracts"]
+	path = listeners/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
