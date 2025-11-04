@@ -23,9 +23,16 @@ app.get("/", async (c) => {
   }
 });
 
-app.get("/2h", async (c) => {
+app.get("/2h", async (c: Context<{
+  Bindings: {
+    DB_SCHEMA_NAME?: string;
+  }
+}>) => {
   try {
     const client = db.client(c);
+
+    const DB_SCHEMA_NAME = c.env.DB_SCHEMA_NAME;
+    const tableName = (basename: string) => DB_SCHEMA_NAME ? `${DB_SCHEMA_NAME}.${basename}` : basename;
 
     const result = await client.execute(sql`
       select
@@ -33,7 +40,7 @@ app.get("/2h", async (c) => {
         sum(case when is_buy is true then coalesce(usd_value, 0) else 0 end)/10e6 as buy_usd,
         sum(case when is_buy is false then coalesce(usd_value, 0) else 0 end)/1e6 as sell_usd,
         sum(usd_value)/1e6 as total_usd
-      from token_swap
+      from ${tableName("token_swap")}
       where "timestamp" >= extract(epoch from now() - interval '120 minutes')
       group by swapper
       order by sum(usd_value) desc
